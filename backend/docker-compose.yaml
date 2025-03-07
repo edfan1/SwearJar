@@ -1,0 +1,40 @@
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:17-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=flaskapp
+      - POSTGRES_USER=flaskuser
+      - POSTGRES_PASSWORD=flaskpassword
+    networks:
+      - app-network
+    
+  # Flask Backend
+  backend:
+    build: .
+    working_dir: /backend
+    volumes:
+      - .:/backend
+    environment:
+      - FLASK_APP=run.py
+      - FLASK_ENV=development
+      - FLASK_DEBUG=1
+      - SECRET_KEY=<INSERT KEY HERE>
+      - DATABASE_URL=<INSERT DB URL HERE>
+    depends_on:
+      - postgres
+    ports:
+      - "5000:5000"   # HTTP
+      - "5001:5001"   # WebSocket
+    networks:
+      - app-network
+    command: flask run --host=0.0.0.0 --port=5000
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
