@@ -26,11 +26,11 @@ services:
     depends_on:
       - postgres
     ports:
-      - "8000:5000"   # Changed from "5000:5000" - Now using port 8000 on host
-      - "8001:5001"   # Changed from "5001:5001"
+      - "8000:8000"   # Changed from "5000:5000" - Now using port 8000 on host
+      - "8001:8001"   # Changed from "5001:5001"
     networks:
       - app-network
-    command: flask run --host=0.0.0.0 --port=5000
+    command: flask run --host=0.0.0.0 --port=8000
 
 networks:
   app-network:
